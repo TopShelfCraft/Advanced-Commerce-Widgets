@@ -1,0 +1,45 @@
+{
+	"name": "topshelfcraft/advanced-commerce-widgets",
+	"type": "craft-plugin",
+	"description": "A collection of useful Dashboard widgets for Craft Commerce",
+	"version": "0.0.1",
+	"keywords": [
+		"craft",
+		"cms",
+		"craftcms",
+		"plugin",
+		"commerce",
+		"dashboard",
+		"widgets",
+		"reporting"
+	],
+	"license": "proprietary",
+	"homepage": "https://topshelfcraft.com",
+	"authors": [
+		{
+			"name": "Top Shelf Craft (Michael Rog)",
+			"homepage": "https://topshelfcraft.com"
+		}
+	],
+	"support": {
+		"email": "support@topshelfcraft.com",
+		"issues": "https://github.com/TopShelfCraft/Commerce-Widgets/issues",
+		"source": "https://github.com/TopShelfCraft/Commerce-Widgets",
+		"docs": "https://github.com/TopShelfCraft/Commerce-Widgets"
+	},
+	"require": {
+		"php": ">=7.1",
+		"craftcms/commerce": "^3.2",
+		"topshelfcraft/ranger": "^3.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"topshelfcraft\\commercewidgets\\": "src/"
+		}
+	},
+	"extra": {
+		"name": "Advanced Commerce Widgets",
+		"handle": "advanced-commerce-widgets",
+		"class": "topshelfcraft\\commercewidgets\\CommerceWidgets"
+	}
+}
