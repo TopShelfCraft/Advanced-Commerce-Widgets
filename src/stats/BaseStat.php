@@ -14,7 +14,28 @@ abstract class BaseStat extends Stat
 	/**
 	 * @var callable
 	 */
-	public $_queryModifier;
+	protected $_cacheNamespace;
+
+	/**
+	 * @var callable
+	 */
+	protected $_queryModifier;
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getHandle(): string
+	{
+		return $this->_handle . $this->_cacheNamespace;
+	}
+
+	/**
+	 * @param $key
+	 */
+	public function setCacheNamespace(string $key)
+	{
+		$this->_cacheNamespace = $key;
+	}
 
 	/**
 	 * @param $modifier

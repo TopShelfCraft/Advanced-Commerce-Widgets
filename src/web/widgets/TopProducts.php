@@ -2,20 +2,33 @@
 namespace topshelfcraft\commercewidgets\web\widgets;
 
 use Craft;
-use craft\base\Widget;
-use craft\commerce\stats\TopProducts as TopProductsStat;
+use craft\commerce\web\assets\statwidgets\StatWidgetsAsset;
 use craft\commerce\widgets\TopProducts as CraftTopProductsWidget;
 use craft\helpers\DateTimeHelper;
+use craft\helpers\StringHelper;
+use craft\web\assets\admintable\AdminTableAsset;
 use topshelfcraft\commercewidgets\CommerceWidgets;
+use topshelfcraft\commercewidgets\stats\TopProducts as TopProductsStat;
 
-// TODO: extend base Widget instead.
 class TopProducts extends CraftTopProductsWidget
 {
 
-	/*
-	 * Instance
-	 * ----------------------------------------------------------------------------------------------
+	use AdvancedWidgetTrait;
+
+	/**
+	 * @var string
 	 */
+	public $type = 'qty';
+
+	/**
+	 * @var array
+	 */
+	private $_typeOptions;
+
+	/**
+	 * @var null|TopProductsStat
+	 */
+	private $_stat;
 
 	/**
 	 * @inheritDoc
@@ -25,20 +38,40 @@ class TopProducts extends CraftTopProductsWidget
 
 		parent::init();
 
-//		$this->_typeOptions = [
-//			'qty' =>  Craft::t('commerce', 'Qty'),
-//			'revenue' => Craft::t('commerce', 'Revenue'),
-//		];
+		$this->_typeOptions = [
+			'qty' =>  Craft::t('commerce', 'Qty'),
+			'revenue' => Craft::t('commerce', 'Revenue'),
+		];
 
-//		$this->dateRange = !$this->dateRange ? TopProductsStat::DATE_RANGE_TODAY : $this->dateRange;
-//
-//		$this->_stat = new TopProductsStat(
-//			$this->dateRange,
-//			$this->type,
-//			DateTimeHelper::toDateTime($this->startDate),
-//			DateTimeHelper::toDateTime($this->endDate)
-//		);
+		$this->dateRange = $this->dateRange ?: TopProductsStat::DATE_RANGE_TODAY;
 
+		$this->_stat = new TopProductsStat(
+			$this->dateRange,
+			DateTimeHelper::toDateTime($this->startDate),
+			DateTimeHelper::toDateTime($this->endDate)
+		);
+
+		$this->_stat->type = $this->type;
+
+		if ($this->queryModifierKey)
+		{
+			$callable = CommerceWidgets::getInstance()->queries->getOrderQueryModifierByKey($this->queryModifierKey);
+			if ($callable)
+			{
+				$this->_stat->setCacheNamespace($this->queryModifierKey);
+				$this->_stat->setQueryModifier($callable);
+			}
+		};
+
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public static function displayName(): string
+	{
+		// TODO: Translate
+		return Craft::t('commerce', 'Top Products') . " - Advanced";
 	}
 
 	/**
@@ -47,75 +80,86 @@ class TopProducts extends CraftTopProductsWidget
 	public function getTitle(): string
 	{
 
-		// TODO: nah.
-		return parent::getTitle();
-
-		if ($this->title)
-		{
-			return $this->title;
-		}
-
 		switch ($this->type) {
-			case 'sales':
-			{
-				return CommerceWidgets::t('Top Products by Sales');
-			}
 			case 'revenue':
 			{
-				return CommerceWidgets::t('Top Products by Total Revenue');
+				$defaultTitle = Craft::t('commerce', 'Top Products by Revenue');
+				break;
 			}
 			case 'qty':
-			{
-				return Craft::t('commerce', 'Top Products by Qty Sold');
-			}
 			default:
 			{
-				return Craft::t('commerce', 'Top Products');
+				$defaultTitle = Craft::t('commerce', 'Top Products by Qty Sold');
+				break;
 			}
 		}
+
+		return CommerceWidgets::t(
+			$this->customTitle,
+			[
+				'title' => $defaultTitle,
+			]
+		);
 
 	}
 
 	/**
-	 * @inheritDoc
+	 * @inheritdoc
 	 */
 	public function getSubtitle()
 	{
-		// TODO: nah.
-		return parent::getSubtitle();
-
-		return $this->_stat->getDateRangeWording();
-	}
-
-
-	/*
-	 * Static
-	 * ----------------------------------------------------------------------------------------------
-	 */
-
-	/**
-	 * @inheritdoc
-	 */
-	public static function displayName(): string
-	{
-		// TODO: Translate
-		return Craft::t('commerce', 'Top Products') . " - Improved";
+		$defaultSubtitle = $this->_stat->getDateRangeWording();
+		return CommerceWidgets::t(
+			$this->customSubtitle,
+			[
+				'subtitle' => $defaultSubtitle,
+			]
+		);
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public static function isSelectable(): bool
+	public function getBodyHtml()
 	{
-		return CraftTopProductsWidget::isSelectable();
+
+		$stats = $this->_stat->get();
+
+		$view = Craft::$app->getView();
+		$view->registerAssetBundle(StatWidgetsAsset::class);
+		$view->registerAssetBundle(AdminTableAsset::class);
+
+		return $view->renderTemplate(
+			'commerce/_components/widgets/products/top/body',
+			[
+				'stats' => $stats,
+				'type' => $this->type,
+				'typeLabel' => $this->_typeOptions[$this->type] ?? '',
+				'id' => 'top-products' . StringHelper::randomString(),
+			]
+		);
+
 	}
 
 	/**
 	 * @inheritdoc
 	 */
-	public static function icon(): string
+	public function getSettingsHtml(): string
 	{
-		return CraftTopProductsWidget::icon();
+
+		$id = 'total-orders' . StringHelper::randomString();
+		$namespaceId = Craft::$app->getView()->namespaceInputId($id);
+
+		return Craft::$app->getView()->renderTemplate(
+			'advanced-commerce-widgets/TopProducts/settings',
+			[
+				'id' => $id,
+				'namespaceId' => $namespaceId,
+				'widget' => $this,
+				'typeOptions' => $this->_typeOptions,
+			]
+		);
+
 	}
 
 }

@@ -1,0 +1,7 @@
+<div class="commerce-widget-numberstat">
+	{% spaceless %}
+		<strong class="commerce-widget-numberstat-number">{{ value ?? '-' }}</strong><br>
+		<span>{{ title | e }}</span><br>
+		<span class="extralight">{{ subtitle | e }}</span>
+	{% endspaceless %}
+</div>

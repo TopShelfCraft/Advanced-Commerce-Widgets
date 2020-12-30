@@ -1,8 +1,6 @@
 <?php
 namespace topshelfcraft\commercewidgets\queries;
 
-use craft\commerce\elements\db\OrderQuery;
-use craft\commerce\elements\Order;
 use craft\commerce\Plugin as Commerce;
 use craft\db\Query;
 use craft\helpers\StringHelper;
@@ -63,6 +61,7 @@ class Queries
 		return null;
 
 		// TODO: Better exception.
+		// TODO: What happens if a modifier gets removed from the config but a User still has a widget that looks for it?
 		throw new \Exception("User defined query modifier \"{$key}\" not specified in config.");
 
 	}

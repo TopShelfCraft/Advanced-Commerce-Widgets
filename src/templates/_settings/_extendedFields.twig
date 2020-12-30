@@ -1,0 +1,58 @@
+<div id="{{ id }}_advanced">
+
+	<div class="field">
+		<div class="heading">
+			<label for="customTitle">
+				{# TODO: Translate. #}
+				Custom Title
+			</label>
+		</div>
+		<div class="input">
+			<span>
+				{% include '_includes/forms/text' with {
+					id: 'customTitle',
+					name: 'customTitle',
+					value: widget.customTitle,
+				} %}
+			</span>
+		</div>
+	</div>
+
+	<div class="field">
+		<div class="heading">
+			<label for="customSubtitle">
+				{# TODO: Translate. #}
+				Custom Subtitle
+			</label>
+		</div>
+		<div class="input">
+			<span>
+				{% include '_includes/forms/text' with {
+					id: 'customSubtitle',
+					name: 'customSubtitle',
+					value: widget.customSubtitle,
+				} %}
+			</span>
+		</div>
+	</div>
+
+	<div class="field">
+		<div class="heading">
+			<label for="queryModifierKey">
+				{# TODO: Translate. #}
+				Order Query
+			</label>
+		</div>
+		<div class="input">
+			<span>
+				{% include '_includes/forms/select' with {
+					id: 'queryModifierKey',
+					name: 'queryModifierKey',
+					value: widget.queryModifierKey,
+					options: craft.app.getModule('advanced-commerce-widgets').queries.getOrderQueryModifierSelectOptions,
+				} %}
+			</span>
+		</div>
+	</div>
+
+</div>

@@ -11,9 +11,4 @@ class Settings extends Model
 	 */
 	public $orderQueryModifiers = [];
 
-	/**
-	 * @var array
-	 */
-	public $customerQueryModifiers = [];
-
 }

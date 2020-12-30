@@ -14,7 +14,7 @@ use yii\base\Event;
  * Module to encapsulate Commerce Widgets functionality.
  *
  * This class will be available throughout the system via:
- * `Craft::$app->getModule('commerce-widgets')`
+ * `Craft::$app->getModule('advanced-commerce-widgets')`
  *
  * @see http://www.yiiframework.com/doc-2.0/guide-structure-modules.html
  *
@@ -22,34 +22,14 @@ use yii\base\Event;
  * @property Queries $queries
  *
  * @method Settings getSettings()
- *
- * @todo AverageOrderTotal (Commerce)
- * @todo NewCustomers (Commerce)
- * @todo Orders (Commerce)
- * @todo RepeatCustomers (Commerce)
- * @todo TopCustomers (Commerce)
- * @todo TopProducts (Commerce)
- * @todo TopProductTypes (Commerce)
- * @todo TopPurchasables (Commerce)
- * @todo TotalOrders (Commerce)
- * @todo TotalOrdersByCountry (Commerce)
- * @todo TotalRevenue (Commerce)
- *
- * @todo CartAbandonment
- * @todo Goal
- * @todo ProductsRecent
- * @todo ProductsTop
- * @todo SubscriptionPlans
- * @todo TopCustomers
- * @todo TotalRevenueOrders
  */
 class CommerceWidgets extends BasePlugin
 {
 
 	/*
-     * Instance
-     * ===========================================================================
-     */
+	 * Instance
+	 * ===========================================================================
+	 */
 
 	/**
 	 * @var bool
@@ -109,9 +89,9 @@ class CommerceWidgets extends BasePlugin
 	}
 
 	/*
-     * Static
-     * ===========================================================================
-     */
+	 * Static
+	 * ===========================================================================
+	 */
 
 	public static function t($message, $params = [], $language = null): string
 	{
