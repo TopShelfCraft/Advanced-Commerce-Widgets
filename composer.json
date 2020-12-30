@@ -23,9 +23,9 @@
 	],
 	"support": {
 		"email": "support@topshelfcraft.com",
-		"issues": "https://github.com/TopShelfCraft/Commerce-Widgets/issues",
-		"source": "https://github.com/TopShelfCraft/Commerce-Widgets",
-		"docs": "https://github.com/TopShelfCraft/Commerce-Widgets"
+		"issues": "https://github.com/TopShelfCraft/Advanced-Commerce-Widgets/issues",
+		"source": "https://github.com/TopShelfCraft/Advanced-Commerce-Widgets",
+		"docs": "https://github.com/TopShelfCraft/Acvanced-Commerce-Widgets"
 	},
 	"require": {
 		"php": ">=7.1",
