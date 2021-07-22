@@ -3,15 +3,13 @@ namespace topshelfcraft\commercewidgets\web\widgets;
 
 use Craft;
 use craft\commerce\helpers\Currency;
-use craft\commerce\Plugin as Commerce;
 use craft\commerce\web\assets\statwidgets\StatWidgetsAsset;
-use craft\commerce\widgets\AverageOrderTotal as CraftAverageOrderTotalWidget;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\StringHelper;
 use topshelfcraft\commercewidgets\CommerceWidgets;
 use topshelfcraft\commercewidgets\stats\AverageOrderTotal as AverageOrderTotalStat;
 
-class AverageOrderTotal extends CraftAverageOrderTotalWidget
+class AverageOrderTotal extends \craft\commerce\widgets\AverageOrderTotal
 {
 
 	use AdvancedWidgetTrait;

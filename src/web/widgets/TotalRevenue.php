@@ -4,14 +4,13 @@ namespace topshelfcraft\commercewidgets\web\widgets;
 use Craft;
 use craft\commerce\helpers\Currency;
 use craft\commerce\web\assets\statwidgets\StatWidgetsAsset;
-use craft\commerce\widgets\TotalRevenue as CommerceTotalRevenueWidget;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\StringHelper;
 use topshelfcraft\commercewidgets\CommerceWidgets;
 use topshelfcraft\commercewidgets\stats\TotalRevenue as TotalRevenueStat;
 
-class TotalRevenue extends CommerceTotalRevenueWidget
+class TotalRevenue extends \craft\commerce\widgets\TotalRevenue
 {
 
 	use AdvancedWidgetTrait;

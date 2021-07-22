@@ -3,32 +3,31 @@ namespace topshelfcraft\commercewidgets\web\widgets;
 
 use Craft;
 use craft\commerce\web\assets\statwidgets\StatWidgetsAsset;
-use craft\commerce\widgets\TopProducts as CraftTopProductsWidget;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\StringHelper;
 use craft\web\assets\admintable\AdminTableAsset;
 use topshelfcraft\commercewidgets\CommerceWidgets;
 use topshelfcraft\commercewidgets\stats\TopProducts as TopProductsStat;
 
-class TopProducts extends CraftTopProductsWidget
+class TopProducts extends \craft\commerce\widgets\TopProducts
 {
 
 	use AdvancedWidgetTrait;
 
 	/**
-	 * @var string
-	 */
-	public $type = 'qty';
-
-	/**
 	 * @var array
 	 */
-	private $_typeOptions;
+	private $_revenueCheckboxOptions;
 
 	/**
 	 * @var null|TopProductsStat
 	 */
 	private $_stat;
+
+	/**
+	 * @var array
+	 */
+	private $_typeOptions;
 
 	/**
 	 * @inheritDoc
@@ -39,19 +38,46 @@ class TopProducts extends CraftTopProductsWidget
 		parent::init();
 
 		$this->_typeOptions = [
-			'qty' =>  Craft::t('commerce', 'Qty'),
-			'revenue' => Craft::t('commerce', 'Revenue'),
+			TopProductsStat::TYPE_QTY => Craft::t('commerce', 'Qty'),
+			TopProductsStat::TYPE_REVENUE => Craft::t('commerce', 'Revenue'),
+		];
+
+		$this->_revenueCheckboxOptions = [
+			[
+				'value' => TopProductsStat::REVENUE_OPTION_DISCOUNT,
+				'label' => Craft::t('commerce', 'Discount'),
+				'checked' => in_array(TopProductsStat::REVENUE_OPTION_DISCOUNT, $this->revenueOptions, true),
+				'instructions' => Craft::t('commerce', 'Include line item discounts.'),
+			],
+			[
+				'value' => TopProductsStat::REVENUE_OPTION_TAX_INCLUDED,
+				'label' => Craft::t('commerce', 'Tax (inc)'),
+				'checked' => in_array(TopProductsStat::REVENUE_OPTION_TAX_INCLUDED, $this->revenueOptions, true),
+				'instructions' => Craft::t('commerce', 'Include built-in line item tax.'),
+			],
+			[
+				'value' => TopProductsStat::REVENUE_OPTION_TAX,
+				'label' => Craft::t('commerce', 'Tax'),
+				'checked' => in_array(TopProductsStat::REVENUE_OPTION_TAX, $this->revenueOptions, true),
+				'instructions' => Craft::t('commerce', 'Include separate line item tax.'),
+			],
+			[
+				'value' => TopProductsStat::REVENUE_OPTION_SHIPPING,
+				'label' => Craft::t('commerce', 'Shipping'),
+				'checked' => in_array(TopProductsStat::REVENUE_OPTION_SHIPPING, $this->revenueOptions, true),
+				'instructions' => Craft::t('commerce', 'Include line item shipping costs.'),
+			],
 		];
 
 		$this->dateRange = $this->dateRange ?: TopProductsStat::DATE_RANGE_TODAY;
 
 		$this->_stat = new TopProductsStat(
 			$this->dateRange,
-			DateTimeHelper::toDateTime($this->startDate),
-			DateTimeHelper::toDateTime($this->endDate)
+			$this->type,
+			DateTimeHelper::toDateTime($this->startDate, true),
+			DateTimeHelper::toDateTime($this->endDate, true),
+			$this->revenueOptions
 		);
-
-		$this->_stat->type = $this->type;
 
 		if ($this->queryModifierKey)
 		{
@@ -147,7 +173,7 @@ class TopProducts extends CraftTopProductsWidget
 	public function getSettingsHtml(): string
 	{
 
-		$id = 'total-orders' . StringHelper::randomString();
+		$id = 'top-products' . StringHelper::randomString();
 		$namespaceId = Craft::$app->getView()->namespaceInputId($id);
 
 		return Craft::$app->getView()->renderTemplate(
@@ -157,6 +183,8 @@ class TopProducts extends CraftTopProductsWidget
 				'namespaceId' => $namespaceId,
 				'widget' => $this,
 				'typeOptions' => $this->_typeOptions,
+				'revenueOptions' => $this->_revenueCheckboxOptions,
+				'isRevenueOptionsEnabled' => $this->type === TopProductsStat::TYPE_REVENUE
 			]
 		);
 

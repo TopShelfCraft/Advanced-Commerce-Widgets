@@ -3,14 +3,13 @@ namespace topshelfcraft\commercewidgets\web\widgets;
 
 use Craft;
 use craft\commerce\web\assets\statwidgets\StatWidgetsAsset;
-use craft\commerce\widgets\TotalOrders as CraftTotalOrdersWiget;
 use craft\helpers\ArrayHelper;
 use craft\helpers\DateTimeHelper;
 use craft\helpers\StringHelper;
 use topshelfcraft\commercewidgets\CommerceWidgets;
 use topshelfcraft\commercewidgets\stats\TotalOrders as TotalOrdersStat;
 
-class TotalOrders extends CraftTotalOrdersWiget
+class TotalOrders extends \craft\commerce\widgets\TotalOrders
 {
 
 	use AdvancedWidgetTrait;
